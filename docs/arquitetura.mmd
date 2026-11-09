@@ -1,0 +1,24 @@
+flowchart LR
+    JAVA["API Java<br/>emite o JWT · cadastro de lugares"]
+    APP["App Sereno<br/>React Native · Expo"]
+
+    subgraph IA["sereno-ia · FastAPI no Azure Web App"]
+        AUTH["Valida o JWT<br/>HS256 · iss · aud"]
+        PREV["POST /ia/previsao-calma"] --> RF["Random Forest<br/>+ ajuste do lugar"]
+        DIR["POST /ia/direitos"] --> BUSCA["Busca FAISS<br/>3 trechos mais próximos"] --> LIMIAR{"relevância<br/>≥ 0,13?"}
+        AUTH --> PREV
+        AUTH --> DIR
+    end
+
+    LLM["LLM por API<br/>Gemini"]
+    NAO["Resposta fixa:<br/>não sei responder"]
+
+    JAVA -. "token JWT" .-> APP
+    APP -- "requisição + Bearer token" --> AUTH
+    RF -- "nível · melhor horário · alertas" --> LLM
+    LIMIAR -- "sim · trechos" --> LLM
+    LIMIAR -- "não" --> NAO
+    PREV -. "categoria do lugar" .-> JAVA
+
+    DADOS[("Avaliações sintéticas + Oracle<br/>treino: ml/treinar.py")] -.-> RF
+    LEIS[("3 leis do Planalto por artigo<br/>índice: rag/indexar.py")] -.-> BUSCA

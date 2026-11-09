@@ -1,0 +1,94 @@
+{
+  "parametros": {
+    "n_estimators": 200,
+    "min_samples_leaf": 5,
+    "max_features": 0.6,
+    "random_state": 42,
+    "encolhimento_ajuste_local": 20
+  },
+  "dados": {
+    "linhas": 6000,
+    "lugares": 24,
+    "fontes": {
+      "sintetico": 6000
+    }
+  },
+  "cenarios": [
+    {
+      "cenario": "teste aleatório (20% das avaliações)",
+      "linhas_treino": 4800,
+      "linhas_teste": 1200,
+      "modelo": {
+        "MAE": 8.21,
+        "R2": 0.749
+      },
+      "baseline_media_geral": {
+        "MAE": 17.23,
+        "R2": -0.0
+      },
+      "baseline_categoria_hora": {
+        "MAE": 8.82,
+        "R2": 0.711
+      },
+      "MAE_por_nota_1a5": {
+        "ruido": 0.58,
+        "luz": 0.5,
+        "lotacao": 0.53
+      }
+    },
+    {
+      "cenario": "lugares novos (nunca vistos)",
+      "linhas_treino": 4500,
+      "linhas_teste": 1500,
+      "modelo": {
+        "MAE": 8.33,
+        "R2": 0.728
+      },
+      "baseline_media_geral": {
+        "MAE": 17.14,
+        "R2": -0.021
+      },
+      "baseline_categoria_hora": {
+        "MAE": 8.42,
+        "R2": 0.724
+      },
+      "MAE_por_nota_1a5": {
+        "ruido": 0.56,
+        "luz": 0.52,
+        "lotacao": 0.5
+      }
+    }
+  ],
+  "bom_senso": [
+    {
+      "caso": "UBS: segunda 8h deve ser mais cheia que segunda 16h",
+      "cheio": 72,
+      "vazio": 23,
+      "ok": true
+    },
+    {
+      "caso": "Terminal: quarta 18h mais cheio que domingo 18h",
+      "cheio": 79,
+      "vazio": 33,
+      "ok": true
+    },
+    {
+      "caso": "Parque: sábado 11h mais cheio que terça 11h",
+      "cheio": 76,
+      "vazio": 31,
+      "ok": true
+    },
+    {
+      "caso": "Poupatempo: segunda 10h mais cheio que sexta 17h",
+      "cheio": 70,
+      "vazio": 27,
+      "ok": true
+    },
+    {
+      "caso": "Biblioteca: terça 9h mais calma que terça 15h",
+      "cheio": 61,
+      "vazio": 21,
+      "ok": true
+    }
+  ]
+}

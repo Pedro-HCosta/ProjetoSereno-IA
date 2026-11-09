@@ -1,0 +1,359 @@
+{
+  "no_tema": [
+    {
+      "id": 1,
+      "pergunta": "O elevador da estação de metrô está parado e eu sou cadeirante. Quais são meus direitos?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 48"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 46"
+        ]
+      ]
+    },
+    {
+      "id": 2,
+      "pergunta": "A estação de trem não tem rampa nem elevador. Ela é obrigada a ser acessível?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 48"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 46"
+        ]
+      ]
+    },
+    {
+      "id": 3,
+      "pergunta": "O ônibus da minha linha não tem elevador para cadeira de rodas. Isso é permitido?",
+      "esperado": [
+        [
+          "Lei 10.098/2000",
+          "art. 16"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 48"
+        ]
+      ]
+    },
+    {
+      "id": 4,
+      "pergunta": "Tenho direito a atendimento prioritário na fila do Poupatempo?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 9º"
+        ]
+      ]
+    },
+    {
+      "id": 5,
+      "pergunta": "Meu filho é autista. Ele é considerado pessoa com deficiência pela lei?",
+      "esperado": [
+        [
+          "Lei 12.764/2012",
+          "art. 1º"
+        ]
+      ]
+    },
+    {
+      "id": 6,
+      "pergunta": "A escola recusou a matrícula do meu filho autista. O que a lei diz sobre isso?",
+      "esperado": [
+        [
+          "Lei 12.764/2012",
+          "art. 7º"
+        ]
+      ]
+    },
+    {
+      "id": 7,
+      "pergunta": "Meu filho autista tem direito a um acompanhante especializado na sala de aula?",
+      "esperado": [
+        [
+          "Lei 12.764/2012",
+          "art. 3º"
+        ]
+      ]
+    },
+    {
+      "id": 8,
+      "pergunta": "Quantas vagas de estacionamento precisam ser reservadas para pessoas com deficiência?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 47"
+        ],
+        [
+          "Lei 10.098/2000",
+          "art. 7º"
+        ]
+      ]
+    },
+    {
+      "id": 9,
+      "pergunta": "O prédio público onde fica a UBS não tem acesso para cadeirantes. Ele é obrigado a ser acessível?",
+      "esperado": [
+        [
+          "Lei 10.098/2000",
+          "art. 11"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 57"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 25"
+        ]
+      ]
+    },
+    {
+      "id": 10,
+      "pergunta": "O que a lei considera como pessoa com deficiência?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 2º"
+        ]
+      ]
+    },
+    {
+      "id": 11,
+      "pergunta": "O que significa acessibilidade segundo a lei?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 3º"
+        ],
+        [
+          "Lei 10.098/2000",
+          "art. 2º"
+        ]
+      ]
+    },
+    {
+      "id": 12,
+      "pergunta": "Fui discriminado por ser pessoa com deficiência. Isso é crime?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 88"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 4º"
+        ]
+      ]
+    },
+    {
+      "id": 13,
+      "pergunta": "A pessoa com autismo tem direito a atendimento de saúde e diagnóstico precoce?",
+      "esperado": [
+        [
+          "Lei 12.764/2012",
+          "art. 3º"
+        ],
+        [
+          "Lei 12.764/2012",
+          "art. 2º"
+        ]
+      ]
+    },
+    {
+      "id": 14,
+      "pergunta": "Existe uma carteira de identificação para pessoa com transtorno do espectro autista?",
+      "esperado": [
+        [
+          "Lei 12.764/2012",
+          "art. 3º-A"
+        ]
+      ]
+    },
+    {
+      "id": 15,
+      "pergunta": "Prédios residenciais que têm elevador precisam seguir regras de acessibilidade?",
+      "esperado": [
+        [
+          "Lei 10.098/2000",
+          "art. 13"
+        ]
+      ]
+    }
+  ],
+  "fora_do_tema": [
+    {
+      "id": 101,
+      "pergunta": "Qual é a receita de bolo de cenoura com cobertura de chocolate?"
+    },
+    {
+      "id": 102,
+      "pergunta": "Qual é a capital da França?"
+    },
+    {
+      "id": 103,
+      "pergunta": "Vai chover amanhã em São Paulo?"
+    },
+    {
+      "id": 104,
+      "pergunta": "Como faço para trocar o pneu do carro?"
+    },
+    {
+      "id": 105,
+      "pergunta": "Qual é o melhor time de futebol do Brasil?"
+    }
+  ],
+  "validacao_no_tema": [
+    {
+      "id": 201,
+      "pergunta": "Os semáforos precisam ter sinal sonoro para pessoas cegas?",
+      "esperado": [
+        [
+          "Lei 10.098/2000",
+          "art. 9º"
+        ]
+      ]
+    },
+    {
+      "id": 202,
+      "pergunta": "Os banheiros do parque precisam ser acessíveis?",
+      "esperado": [
+        [
+          "Lei 10.098/2000",
+          "art. 6º"
+        ]
+      ]
+    },
+    {
+      "id": 203,
+      "pergunta": "O hotel precisa ter quartos acessíveis para cadeirantes?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 45"
+        ]
+      ]
+    },
+    {
+      "id": 204,
+      "pergunta": "Pessoa com deficiência tem direito de trabalhar em igualdade com as outras pessoas?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 34"
+        ]
+      ]
+    },
+    {
+      "id": 205,
+      "pergunta": "Fui impedido de me matricular na faculdade por ter deficiência. Isso é permitido?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 27"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 28"
+        ],
+        [
+          "Lei 12.764/2012",
+          "art. 7º"
+        ]
+      ]
+    },
+    {
+      "id": 206,
+      "pergunta": "O cinema precisa reservar lugar para cadeira de rodas?",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 44"
+        ],
+        [
+          "Lei 10.098/2000",
+          "art. 12"
+        ]
+      ],
+      "nota": "Gabarito corrigido após a revisão: o art. 12 da Lei 10.098 (espaços para cadeira de rodas em locais de espetáculos) também responde."
+    }
+  ],
+  "validacao_fora_do_tema": [
+    {
+      "id": 301,
+      "pergunta": "Como faço para declarar o imposto de renda?"
+    },
+    {
+      "id": 302,
+      "pergunta": "Quanto custa uma passagem de avião para o Rio de Janeiro?"
+    }
+  ],
+  "fluxo_principal": [
+    {
+      "id": 401,
+      "pergunta": "O elevador da estação está parado e eu sou cadeirante.",
+      "contexto": "Estação Sé",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 48"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 46"
+        ]
+      ]
+    },
+    {
+      "id": 402,
+      "pergunta": "Sou cadeirante e a escada rolante do metrô não funciona",
+      "contexto": null,
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 48"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 46"
+        ]
+      ]
+    },
+    {
+      "id": 403,
+      "pergunta": "Quais são meus direitos?",
+      "contexto": "Estação Paulista · elevador parado",
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 48"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 46"
+        ]
+      ]
+    },
+    {
+      "id": 404,
+      "pergunta": "A plataforma elevatória do trem quebrou",
+      "contexto": null,
+      "esperado": [
+        [
+          "Lei 13.146/2015",
+          "art. 48"
+        ],
+        [
+          "Lei 13.146/2015",
+          "art. 46"
+        ]
+      ]
+    }
+  ]
+}
