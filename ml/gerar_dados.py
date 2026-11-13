@@ -13,12 +13,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from app.features import CATEGORIAS, HORARIO_TIPICO
+from app.features import CATEGORIAS, perfil
 
 RAIZ = Path(__file__).resolve().parent
 SEMENTE = 2026
 VISITAS_POR_LOCAL = 250
-LOCAIS_EXTRAS_POR_CATEGORIA = 3  # lugares sintéticos além dos 6 do catálogo, para o modelo generalizar
+LOCAIS_EXTRAS_POR_CATEGORIA = 3  # lugares sintéticos além dos 4 do catálogo (os mesmos da API Java), para o modelo generalizar
 
 
 def _pico(h, centro, altura, largura):
@@ -75,20 +75,22 @@ def _nota(valor_0a1, ruido, rng):
 def gerar(semente: int = SEMENTE) -> pd.DataFrame:
     rng = np.random.default_rng(semente)
     catalogo = json.loads((RAIZ / "dados" / "locais.json").read_text(encoding="utf-8"))
-    locais = [(l["id"], l["categoria"]) for l in catalogo]
+    # Tipos do Java (BIBLIOTECA, PARQUE...) viram a categoria do modelo, com o horário do próprio tipo
+    locais = [(l["id"], perfil(l["categoria"])) for l in catalogo]
     prox = 101
     for cat in CATEGORIAS:
         for _ in range(LOCAIS_EXTRAS_POR_CATEGORIA):
-            locais.append((prox, cat))
+            locais.append((prox, perfil(cat)))
             prox += 1
 
     linhas = []
-    for local_id, cat in locais:
+    for local_id, p in locais:
+        cat, horario = p["categoria"], p["horario"]
         fator_lotacao = rng.normal(1.0, 0.15)  # alguns lugares são mais movimentados que outros
         ajuste_luz = rng.normal(0, 0.08)
-        dias = sorted(HORARIO_TIPICO[cat])
+        dias = sorted(horario)
         # Mais visitas (e avaliações) quando o lugar está cheio, como na vida real
-        opcoes = [(d, h) for d in dias for h in range(*HORARIO_TIPICO[cat][d])]
+        opcoes = [(d, h) for d in dias for h in range(*horario[d])]
         pesos = np.array([0.3 + lotacao_esperada(cat, d, h + 0.5) for d, h in opcoes])
         escolhas = rng.choice(len(opcoes), size=VISITAS_POR_LOCAL, p=pesos / pesos.sum())
         for i in escolhas:

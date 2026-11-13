@@ -84,7 +84,8 @@ def prever(local: dict, dia: int, hora: int) -> dict:
     if int(local["id"]) not in pacote["ajuste_local"]:
         alertas.append("Este lugar ainda tem poucas avaliações; a previsão usa o padrão de lugares parecidos")
 
-    k = cache.chave("previsao", local["id"], dia, hora)
+    # nome e tipo na chave: se o Java falhar e entrar o catálogo local, essa resposta não é reaproveitada para o lugar do Java
+    k = cache.chave("previsao", local["id"], local.get("nome"), local.get("categoria"), dia, hora)
     guardado = cache.obter(k)
     if guardado:
         return guardado

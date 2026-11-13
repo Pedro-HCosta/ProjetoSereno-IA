@@ -7,87 +7,87 @@
     "encolhimento_ajuste_local": 20
   },
   "dados": {
-    "linhas": 6000,
-    "lugares": 24,
+    "linhas": 5500,
+    "lugares": 22,
     "fontes": {
-      "sintetico": 6000
+      "sintetico": 5500
     }
   },
   "cenarios": [
     {
       "cenario": "teste aleatório (20% das avaliações)",
-      "linhas_treino": 4800,
-      "linhas_teste": 1200,
+      "linhas_treino": 4400,
+      "linhas_teste": 1100,
       "modelo": {
-        "MAE": 8.21,
-        "R2": 0.749
+        "MAE": 7.9,
+        "R2": 0.786
       },
       "baseline_media_geral": {
-        "MAE": 17.23,
+        "MAE": 17.85,
         "R2": -0.0
       },
       "baseline_categoria_hora": {
-        "MAE": 8.82,
-        "R2": 0.711
+        "MAE": 8.44,
+        "R2": 0.749
       },
       "MAE_por_nota_1a5": {
         "ruido": 0.58,
-        "luz": 0.5,
+        "luz": 0.53,
         "lotacao": 0.53
       }
     },
     {
       "cenario": "lugares novos (nunca vistos)",
-      "linhas_treino": 4500,
+      "linhas_treino": 4000,
       "linhas_teste": 1500,
       "modelo": {
-        "MAE": 8.33,
-        "R2": 0.728
+        "MAE": 9.36,
+        "R2": 0.67
       },
       "baseline_media_geral": {
-        "MAE": 17.14,
-        "R2": -0.021
+        "MAE": 17.09,
+        "R2": -0.006
       },
       "baseline_categoria_hora": {
-        "MAE": 8.42,
-        "R2": 0.724
+        "MAE": 9.42,
+        "R2": 0.666
       },
       "MAE_por_nota_1a5": {
-        "ruido": 0.56,
-        "luz": 0.52,
-        "lotacao": 0.5
+        "ruido": 0.58,
+        "luz": 0.55,
+        "lotacao": 0.55
       }
     }
   ],
   "bom_senso": [
     {
       "caso": "UBS: segunda 8h deve ser mais cheia que segunda 16h",
-      "cheio": 72,
+      "cheio": 76,
       "vazio": 23,
       "ok": true
     },
     {
       "caso": "Terminal: quarta 18h mais cheio que domingo 18h",
-      "cheio": 79,
-      "vazio": 33,
+      "cheio": 69,
+      "vazio": 36,
       "ok": true
     },
     {
       "caso": "Parque: sábado 11h mais cheio que terça 11h",
-      "cheio": 76,
-      "vazio": 31,
+      "cheio": 80,
+      "vazio": 35,
       "ok": true
     },
     {
       "caso": "Poupatempo: segunda 10h mais cheio que sexta 17h",
-      "cheio": 70,
-      "vazio": 27,
+      "cheio": 67,
+      "vazio": 22,
       "ok": true
     },
     {
       "caso": "Biblioteca: terça 9h mais calma que terça 15h",
-      "cheio": 61,
-      "vazio": 21,
+      "cheio": 49,
+      "vazio": 19,
       "ok": true
     }
   ]

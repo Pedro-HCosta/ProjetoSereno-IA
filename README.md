@@ -80,7 +80,7 @@ Resposta (exemplo; o número e os alertas são os reais do modelo, a frase varia
 
 | Fonte | O que é | Arquivo |
 | --- | --- | --- |
-| Conjunto sintético | 6.000 avaliações de 24 lugares (6 do catálogo + 3 extras por categoria), geradas a partir de padrões documentados: UBS cheia logo cedo e às segundas, terminal cheio nos horários de pico, parque cheio no fim de semana e com sol forte ao meio-dia, biblioteca calma de manhã. Semente fixa (2026), então o arquivo sai igual em qualquer máquina. | `ml/gerar_dados.py` → `ml/dados/avaliacoes_sinteticas.csv` |
+| Conjunto sintético | 5.500 avaliações de 22 lugares (os 4 lugares cadastrados na API Java + 3 extras por categoria), geradas a partir de padrões documentados: UBS cheia logo cedo e às segundas, terminal cheio nos horários de pico, parque cheio no fim de semana e com sol forte ao meio-dia, biblioteca calma de manhã. Semente fixa (2026), então o arquivo sai igual em qualquer máquina. | `ml/gerar_dados.py` → `ml/dados/avaliacoes_sinteticas.csv` |
 | Avaliações reais (opcional) | Exportação da tabela `SER_AVALIACAO` do Oracle. Se o arquivo existir, o treino junta ao sintético. | `ml/dados/avaliacoes_oracle.csv` |
 
 Por que sintético: o app ainda não tem volume de avaliações reais. Exportação das avaliações reais, quando houver:
@@ -103,10 +103,10 @@ Preparação: o dia e a hora da visita viram `dia_semana`, `hora` e `fim_de_sema
 
 | Cenário | Modelo (MAE / R²) | Média geral (MAE / R²) | Média por categoria e hora (MAE / R²) |
 | --- | --- | --- | --- |
-| Teste aleatório (20% das avaliações) | **8,21 / 0,749** | 17,23 / 0,00 | 8,82 / 0,711 |
-| Lugares novos (nunca vistos) | **8,33 / 0,728** | 17,14 / −0,02 | 8,42 / 0,724 |
+| Teste aleatório (20% das avaliações) | **7,90 / 0,786** | 17,85 / 0,00 | 8,44 / 0,749 |
+| Lugares novos (nunca vistos) | **9,36 / 0,670** | 17,09 / −0,01 | 9,42 / 0,666 |
 
-MAE em pontos da escala 0–100. O modelo erra metade do que erra a média simples (linha de base pedida) e vence também uma linha de base bem mais forte, a média por categoria, dia útil/fim de semana e hora. A margem sobre essa segunda linha de base é pequena porque as notas têm ruído (pessoas diferentes dão notas diferentes para a mesma situação): pela variação usada na geração dos dados, só esse ruído já impõe um erro mínimo estimado em cerca de 7 pontos. As 5 checagens de bom senso passam (ex.: UBS na segunda às 8h = 72 contra 23 às 16h).
+MAE em pontos da escala 0–100. O modelo erra metade do que erra a média simples (linha de base pedida) e vence também uma linha de base bem mais forte, a média por categoria, dia útil/fim de semana e hora. A margem sobre essa segunda linha de base é pequena porque as notas têm ruído (pessoas diferentes dão notas diferentes para a mesma situação): pela variação usada na geração dos dados, só esse ruído já impõe um erro mínimo estimado em cerca de 7 pontos. As 5 checagens de bom senso passam (ex.: UBS na segunda às 8h = 76 contra 23 às 16h).
 
 ## Funcionalidade 2 — "Quais são meus direitos?" (RAG + IA generativa)
 
@@ -243,10 +243,10 @@ python -c "import jwt,time,os;from dotenv import load_dotenv;load_dotenv();t=int
 python iniciar.py testes
 ```
 
-38 testes automatizados, todos sem rede e sem LLM de verdade (o LLM é simulado):
+57 testes automatizados, todos sem rede e sem LLM de verdade (o LLM é simulado):
 
 - **Autenticação e erros:** sem token, token expirado, outro segredo e outro emissor dão 401 no formato padrão; dados inválidos dão 400 com o campo.
-- **Previsão:** formato do Contrato, UBS cheia cedo e vazia à tarde, melhor horário dentro do funcionamento, alerta fora do horário, dia e hora em formatos diferentes, local inexistente (404), LLM fora do ar (texto alternativo), cache (a segunda chamada igual não chama o LLM; texto alternativo não fica guardado).
+- **Previsão:** formato do Contrato, estação cheia no pico e mais vazia no meio do dia, melhor horário dentro do funcionamento, alerta fora do horário, dia e hora em formatos diferentes, local inexistente (404), LLM fora do ar (texto alternativo), cache (a segunda chamada igual não chama o LLM; texto alternativo não fica guardado).
 - **RAG:** divisão por artigo, remoção de texto revogado e notas, capítulos como contexto, busca, recusa fora do tema sem chamar o LLM, `NAO_SEI` do LLM, índice ausente (503).
 - **Regressão com as leis reais:** as 4 perguntas do fluxo principal trazem o art. 46 ou 48 da Lei 13.146, e perguntas fora do tema são recusadas.
 
@@ -293,7 +293,7 @@ Limites do plano gratuito: 60 min de CPU por dia, 1 GB de RAM e sem Always On (o
 app/          serviço FastAPI (rotas, JWT, erros, previsão, RAG, cliente do LLM)
 ml/           gerar_dados.py, treinar.py, dados/, modelo/, RESULTADOS.md
 rag/          leis/ (textos oficiais), indexar.py, avaliar.py, indice/, avaliacao/, RESULTADOS.md
-tests/        pytest (38 testes) e uma lei fictícia de teste
+tests/        pytest (57 testes) e uma lei fictícia de teste
 docs/         diagrama da arquitetura e guias por integrante
 scripts/      azure_deploy.sh (deploy na Azure)
 ```

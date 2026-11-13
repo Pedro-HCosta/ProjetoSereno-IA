@@ -20,7 +20,7 @@ def test_resposta_tem_o_formato_do_contrato(cliente, cabecalho):
 def test_sem_llm_usa_texto_alternativo_e_nao_quebra(cliente, cabecalho):
     d = prever(cliente, cabecalho).json()
     assert d["geradoPor"] == "regra"
-    assert "UBS Vila Mariana" in d["explicacao"]
+    assert "Biblioteca Mário de Andrade" in d["explicacao"]
 
 
 def test_com_llm_usa_a_frase_gerada(cliente, cabecalho, monkeypatch):
@@ -34,7 +34,7 @@ def test_com_llm_usa_a_frase_gerada(cliente, cabecalho, monkeypatch):
     d = prever(cliente, cabecalho).json()
     assert d["geradoPor"] == "llm"
     assert d["explicacao"].startswith("Segunda às 8h")
-    assert "UBS Vila Mariana" in recebido["dados"]  # o LLM recebe só os dados calculados
+    assert "Biblioteca Mário de Andrade" in recebido["dados"]  # o LLM recebe só os dados calculados
 
 
 def test_falha_do_llm_cai_no_texto_alternativo(cliente, cabecalho, monkeypatch):
@@ -45,20 +45,20 @@ def test_falha_do_llm_cai_no_texto_alternativo(cliente, cabecalho, monkeypatch):
     assert prever(cliente, cabecalho).json()["geradoPor"] == "regra"
 
 
-def test_ubs_segunda_cedo_e_mais_cheia_que_a_tarde(cliente, cabecalho):
-    cedo = prever(cliente, cabecalho, hora=8).json()["nivelPrevisto"]
-    tarde = prever(cliente, cabecalho, hora=16).json()["nivelPrevisto"]
-    assert cedo > tarde + 15
+def test_estacao_no_pico_e_mais_cheia_que_fora_do_pico(cliente, cabecalho):
+    pico = prever(cliente, cabecalho, localId=4, diaSemana=3, hora=18).json()["nivelPrevisto"]  # Estação da Luz
+    meio_do_dia = prever(cliente, cabecalho, localId=4, diaSemana=3, hora=11).json()["nivelPrevisto"]
+    assert pico > meio_do_dia + 15
 
 
 def test_melhor_horario_fica_dentro_do_funcionamento(cliente, cabecalho):
-    d = prever(cliente, cabecalho, hora=8).json()
-    assert 7 <= d["melhorHorario"] < 19
-    assert d["melhorHorario"] != 8
+    d = prever(cliente, cabecalho, hora=15).json()  # Biblioteca, segunda à tarde (mais cheia)
+    assert 8 <= d["melhorHorario"] < 20
+    assert d["melhorHorario"] != 15
 
 
 def test_horario_fora_do_funcionamento_gera_alerta(cliente, cabecalho):
-    d = prever(cliente, cabecalho, diaSemana=0, hora=10).json()  # UBS no domingo
+    d = prever(cliente, cabecalho, diaSemana=0, hora=10).json()  # Biblioteca no domingo
     assert d["melhorHorario"] is None
     assert any("costumam estar fechados" in a for a in d["alertas"])
 
@@ -156,3 +156,19 @@ def test_java_fora_do_ar_com_lugar_desconhecido_responde_503(cliente, cabecalho,
 def test_java_404_responde_404(cliente, cabecalho, monkeypatch):
     _java(monkeypatch, _RespostaJava(404))
     assert prever(cliente, cabecalho, localId=50).status_code == 404
+
+
+def test_cache_nao_mistura_catalogo_local_com_lugar_do_java(cliente, cabecalho, monkeypatch):
+    """Se o Java falhou (entrou o catálogo local), a próxima chamada com o Java no ar usa o nome dele."""
+    import httpx
+
+    from app import llm
+
+    monkeypatch.setattr(llm, "configurado", lambda: True)
+    monkeypatch.setattr(llm, "gerar", lambda sistema, usuario, **kw: f"Texto sobre {usuario}")
+    _java(monkeypatch, httpx.ConnectTimeout("Render dormindo"))
+    primeira = prever(cliente, cabecalho, localId=1, hora=10).json()
+    _java(monkeypatch, _RespostaJava(200, {"nome": "Lugar Oficial do Java", "categoria": "SAUDE"}))
+    segunda = prever(cliente, cabecalho, localId=1, hora=10).json()
+    assert "Biblioteca Mário de Andrade" in primeira["explicacao"]
+    assert "Lugar Oficial do Java" in segunda["explicacao"]
