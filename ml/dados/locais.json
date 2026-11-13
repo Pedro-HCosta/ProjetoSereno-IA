@@ -1,0 +1,8 @@
+[
+  {"id": 1, "nome": "UBS Vila Mariana", "categoria": "SAUDE"},
+  {"id": 2, "nome": "Mercado Municipal Paulistano", "categoria": "MERCADO"},
+  {"id": 3, "nome": "Terminal Parque Dom Pedro II", "categoria": "TRANSPORTE"},
+  {"id": 4, "nome": "Parque Ibirapuera", "categoria": "LAZER"},
+  {"id": 5, "nome": "Poupatempo Sé", "categoria": "SERVICO_PUBLICO"},
+  {"id": 6, "nome": "Biblioteca Mário de Andrade", "categoria": "EDUCACAO"}
+]

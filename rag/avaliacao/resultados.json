@@ -1,0 +1,840 @@
+{
+  "limiar_em_uso": 0.13,
+  "desenvolvimento": {
+    "acerto_top3": "15/15",
+    "acerto_top1": "9/15",
+    "respondidas_no_tema": "15/15",
+    "recusadas_fora_do_tema": "5/5"
+  },
+  "validacao": {
+    "acerto_top3": "5/6",
+    "acerto_top1": "3/6",
+    "respondidas_no_tema": "4/6",
+    "recusadas_fora_do_tema": "1/2"
+  },
+  "fluxo_principal": {
+    "acerto_top3": "4/4"
+  },
+  "varredura_de_limiar": [
+    {
+      "limiar": 0.1,
+      "respondidas_no_tema": 15,
+      "recusadas_fora_do_tema": 4
+    },
+    {
+      "limiar": 0.12,
+      "respondidas_no_tema": 15,
+      "recusadas_fora_do_tema": 4
+    },
+    {
+      "limiar": 0.13,
+      "respondidas_no_tema": 15,
+      "recusadas_fora_do_tema": 5
+    },
+    {
+      "limiar": 0.15,
+      "respondidas_no_tema": 14,
+      "recusadas_fora_do_tema": 5
+    },
+    {
+      "limiar": 0.2,
+      "respondidas_no_tema": 11,
+      "recusadas_fora_do_tema": 5
+    },
+    {
+      "limiar": 0.25,
+      "respondidas_no_tema": 10,
+      "recusadas_fora_do_tema": 5
+    }
+  ],
+  "detalhe": {
+    "desenvolvimento": {
+      "no_tema": [
+        {
+          "id": 1,
+          "pergunta": "O elevador da estação de metrô está parado e eu sou cadeirante. Quais são meus direitos?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 46"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 48"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 16"
+            ]
+          ],
+          "nota_top1": 0.288,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 48"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 46"
+            ]
+          ]
+        },
+        {
+          "id": 2,
+          "pergunta": "A estação de trem não tem rampa nem elevador. Ela é obrigada a ser acessível?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 16"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 48"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 46"
+            ]
+          ],
+          "nota_top1": 0.266,
+          "acertou": true,
+          "posicao": 2,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 48"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 46"
+            ]
+          ]
+        },
+        {
+          "id": 3,
+          "pergunta": "O ônibus da minha linha não tem elevador para cadeira de rodas. Isso é permitido?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 16"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 12-A"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 46"
+            ]
+          ],
+          "nota_top1": 0.273,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 10.098/2000",
+              "art. 16"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 48"
+            ]
+          ]
+        },
+        {
+          "id": 4,
+          "pergunta": "Tenho direito a atendimento prioritário na fila do Poupatempo?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 9º"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 111"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 18"
+            ]
+          ],
+          "nota_top1": 0.247,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 9º"
+            ]
+          ]
+        },
+        {
+          "id": 5,
+          "pergunta": "Meu filho é autista. Ele é considerado pessoa com deficiência pela lei?",
+          "top3": [
+            [
+              "Lei 12.764/2012",
+              "art. 2º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 5º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 1º"
+            ]
+          ],
+          "nota_top1": 0.333,
+          "acertou": true,
+          "posicao": 3,
+          "esperado": [
+            [
+              "Lei 12.764/2012",
+              "art. 1º"
+            ]
+          ]
+        },
+        {
+          "id": 6,
+          "pergunta": "A escola recusou a matrícula do meu filho autista. O que a lei diz sobre isso?",
+          "top3": [
+            [
+              "Lei 12.764/2012",
+              "art. 7º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 2º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 3º"
+            ]
+          ],
+          "nota_top1": 0.266,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 12.764/2012",
+              "art. 7º"
+            ]
+          ]
+        },
+        {
+          "id": 7,
+          "pergunta": "Meu filho autista tem direito a um acompanhante especializado na sala de aula?",
+          "top3": [
+            [
+              "Lei 12.764/2012",
+              "art. 2º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 3º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 5º"
+            ]
+          ],
+          "nota_top1": 0.314,
+          "acertou": true,
+          "posicao": 2,
+          "esperado": [
+            [
+              "Lei 12.764/2012",
+              "art. 3º"
+            ]
+          ]
+        },
+        {
+          "id": 8,
+          "pergunta": "Quantas vagas de estacionamento precisam ser reservadas para pessoas com deficiência?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 7º"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 47"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 119"
+            ]
+          ],
+          "nota_top1": 0.273,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 47"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 7º"
+            ]
+          ]
+        },
+        {
+          "id": 9,
+          "pergunta": "O prédio público onde fica a UBS não tem acesso para cadeirantes. Ele é obrigado a ser acessível?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 57"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 12-A"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 13"
+            ]
+          ],
+          "nota_top1": 0.297,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 10.098/2000",
+              "art. 11"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 57"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 25"
+            ]
+          ]
+        },
+        {
+          "id": 10,
+          "pergunta": "O que a lei considera como pessoa com deficiência?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 26"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 2º"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 4º"
+            ]
+          ],
+          "nota_top1": 0.187,
+          "acertou": true,
+          "posicao": 2,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 2º"
+            ]
+          ]
+        },
+        {
+          "id": 11,
+          "pergunta": "O que significa acessibilidade segundo a lei?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 26"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 3º"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 2º"
+            ]
+          ],
+          "nota_top1": 0.135,
+          "acertou": true,
+          "posicao": 2,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 3º"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 2º"
+            ]
+          ]
+        },
+        {
+          "id": 12,
+          "pergunta": "Fui discriminado por ser pessoa com deficiência. Isso é crime?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 4º"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 23"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 5º"
+            ]
+          ],
+          "nota_top1": 0.165,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 88"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 4º"
+            ]
+          ]
+        },
+        {
+          "id": 13,
+          "pergunta": "A pessoa com autismo tem direito a atendimento de saúde e diagnóstico precoce?",
+          "top3": [
+            [
+              "Lei 12.764/2012",
+              "art. 2º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 3º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 5º"
+            ]
+          ],
+          "nota_top1": 0.395,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 12.764/2012",
+              "art. 3º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 2º"
+            ]
+          ]
+        },
+        {
+          "id": 14,
+          "pergunta": "Existe uma carteira de identificação para pessoa com transtorno do espectro autista?",
+          "top3": [
+            [
+              "Lei 12.764/2012",
+              "art. 3º-A"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 2º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 5º"
+            ]
+          ],
+          "nota_top1": 0.395,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 12.764/2012",
+              "art. 3º-A"
+            ]
+          ]
+        },
+        {
+          "id": 15,
+          "pergunta": "Prédios residenciais que têm elevador precisam seguir regras de acessibilidade?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 14"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 13"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 104"
+            ]
+          ],
+          "nota_top1": 0.171,
+          "acertou": true,
+          "posicao": 2,
+          "esperado": [
+            [
+              "Lei 10.098/2000",
+              "art. 13"
+            ]
+          ]
+        }
+      ],
+      "fora": [
+        {
+          "id": 101,
+          "pergunta": "Qual é a receita de bolo de cenoura com cobertura de chocolate?",
+          "nota_top1": 0.088
+        },
+        {
+          "id": 102,
+          "pergunta": "Qual é a capital da França?",
+          "nota_top1": 0.084
+        },
+        {
+          "id": 103,
+          "pergunta": "Vai chover amanhã em São Paulo?",
+          "nota_top1": 0.085
+        },
+        {
+          "id": 104,
+          "pergunta": "Como faço para trocar o pneu do carro?",
+          "nota_top1": 0.091
+        },
+        {
+          "id": 105,
+          "pergunta": "Qual é o melhor time de futebol do Brasil?",
+          "nota_top1": 0.128
+        }
+      ]
+    },
+    "validacao": {
+      "no_tema": [
+        {
+          "id": 201,
+          "pergunta": "Os semáforos precisam ter sinal sonoro para pessoas cegas?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 9º"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 112"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 8º"
+            ]
+          ],
+          "nota_top1": 0.303,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 10.098/2000",
+              "art. 9º"
+            ]
+          ]
+        },
+        {
+          "id": 202,
+          "pergunta": "Os banheiros do parque precisam ser acessíveis?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 6º"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 73-A"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 48"
+            ]
+          ],
+          "nota_top1": 0.303,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 10.098/2000",
+              "art. 6º"
+            ]
+          ]
+        },
+        {
+          "id": 203,
+          "pergunta": "O hotel precisa ter quartos acessíveis para cadeirantes?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 3º"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 13"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 73-A"
+            ]
+          ],
+          "nota_top1": 0.09,
+          "acertou": false,
+          "posicao": null,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 45"
+            ]
+          ]
+        },
+        {
+          "id": 204,
+          "pergunta": "Pessoa com deficiência tem direito de trabalhar em igualdade com as outras pessoas?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 34"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 38"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 4º"
+            ]
+          ],
+          "nota_top1": 0.265,
+          "acertou": true,
+          "posicao": 1,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 34"
+            ]
+          ]
+        },
+        {
+          "id": 205,
+          "pergunta": "Fui impedido de me matricular na faculdade por ter deficiência. Isso é permitido?",
+          "top3": [
+            [
+              "Lei 13.146/2015",
+              "art. 76"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 2º"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 7º"
+            ]
+          ],
+          "nota_top1": 0.09,
+          "acertou": true,
+          "posicao": 3,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 27"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 28"
+            ],
+            [
+              "Lei 12.764/2012",
+              "art. 7º"
+            ]
+          ]
+        },
+        {
+          "id": 206,
+          "pergunta": "O cinema precisa reservar lugar para cadeira de rodas?",
+          "top3": [
+            [
+              "Lei 10.098/2000",
+              "art. 12-A"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 12"
+            ],
+            [
+              "Lei 13.146/2015",
+              "art. 53"
+            ]
+          ],
+          "nota_top1": 0.252,
+          "acertou": true,
+          "posicao": 2,
+          "esperado": [
+            [
+              "Lei 13.146/2015",
+              "art. 44"
+            ],
+            [
+              "Lei 10.098/2000",
+              "art. 12"
+            ]
+          ]
+        }
+      ],
+      "fora": [
+        {
+          "id": 301,
+          "pergunta": "Como faço para declarar o imposto de renda?",
+          "nota_top1": 0.121
+        },
+        {
+          "id": 302,
+          "pergunta": "Quanto custa uma passagem de avião para o Rio de Janeiro?",
+          "nota_top1": 0.16
+        }
+      ]
+    },
+    "fluxo_principal": [
+      {
+        "id": 401,
+        "pergunta": "O elevador da estação está parado e eu sou cadeirante.",
+        "top3": [
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ],
+          [
+            "Lei 10.098/2000",
+            "art. 12-A"
+          ]
+        ],
+        "nota_top1": 0.269,
+        "acertou": true,
+        "posicao": 1,
+        "esperado": [
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ]
+        ]
+      },
+      {
+        "id": 402,
+        "pergunta": "Sou cadeirante e a escada rolante do metrô não funciona",
+        "top3": [
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ],
+          [
+            "Lei 10.098/2000",
+            "art. 12-A"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ]
+        ],
+        "nota_top1": 0.264,
+        "acertou": true,
+        "posicao": 1,
+        "esperado": [
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ]
+        ]
+      },
+      {
+        "id": 403,
+        "pergunta": "Quais são meus direitos?",
+        "top3": [
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ],
+          [
+            "Lei 10.098/2000",
+            "art. 16"
+          ]
+        ],
+        "nota_top1": 0.244,
+        "acertou": true,
+        "posicao": 1,
+        "esperado": [
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ]
+        ]
+      },
+      {
+        "id": 404,
+        "pergunta": "A plataforma elevatória do trem quebrou",
+        "top3": [
+          [
+            "Lei 10.098/2000",
+            "art. 16"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ]
+        ],
+        "nota_top1": 0.255,
+        "acertou": true,
+        "posicao": 2,
+        "esperado": [
+          [
+            "Lei 13.146/2015",
+            "art. 48"
+          ],
+          [
+            "Lei 13.146/2015",
+            "art. 46"
+          ]
+        ]
+      }
+    ]
+  }
+}
