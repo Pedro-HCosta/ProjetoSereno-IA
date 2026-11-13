@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # =====================================================================
 #  Sereno - Serviço de IA no Azure App Service (Web App Linux, plano F1)
-#  Baseado na Aula 13 (Criando um Web App): az provider register,
-#  az webapp up e az webapp config.
+#  Baseado na Aula 13 (Criando um Web App), com az webapp create e
+#  az webapp deploy.
 #
-#  Como usar (Cloud Shell do Portal, igual à aula, ou Git Bash/Linux):
-#    git clone <link do repositório sereno-ia>
-#    cd sereno-ia
+#  Como usar (Cloud Shell do Portal, em Bash, ou Git Bash/Linux com az login):
+#    git clone https://github.com/Pedro-HCosta/ProjetoSereno-IA.git
+#    cd ProjetoSereno-IA
 #    bash scripts/azure_deploy.sh
 #
-#  Credenciais: o script lê JWT_SECRET e AI_API_KEY do .env (se existir)
-#  ou pergunta na hora. Elas vão só para as Configurações do Web App,
+#  Credenciais: lê JWT_SECRET e AI_API_KEY do .env (se existir) ou pergunta
+#  na hora, sem mostrar na tela. Elas vão só para as Configurações do Web App,
 #  nunca para o código.
 # =====================================================================
 set -euo pipefail
@@ -48,27 +48,46 @@ if [ ${#JWT_SECRET} -lt 32 ]; then
 fi
 
 # O modelo treinado e o índice das leis vão prontos no repositório
-for f in ml/modelo/modelo_previsao.joblib rag/indice/leis.faiss ml/dados/locais.json; do
+for f in requirements.txt ml/modelo/modelo_previsao.joblib rag/indice/leis.faiss ml/dados/locais.json; do
   [ -f "$f" ] || { echo "ERRO: falta $f (rode: python iniciar.py treinar)"; exit 1; }
 done
 
 echo "==> 1) Registrando o serviço de Web App na assinatura"
 az provider register --namespace Microsoft.Web --wait
 
-echo "==> 2) Criando Grupo de Recursos, Plano e Web App e fazendo o deploy (az webapp up)"
-# Copia o diretório atual para o Azure (ignora .env e pastas de ambiente virtual)
-# e instala o requirements.txt na nuvem
-az webapp up \
-  --resource-group "$RG" \
+echo "==> 2) Criando o Grupo de Recursos"
+az group create \
+  --name "$RG" \
   --location "$LOCATION" \
-  --plan "$PLAN" \
-  --name "$APP" \
-  --runtime "$RUNTIME" \
-  --os-type Linux \
-  --sku "$SKU" \
-  --logs
+  --output none
 
-echo "==> 3) Configurações do aplicativo (variáveis de ambiente)"
+echo "==> 3) Criando o Plano de Serviço (Linux, $SKU)"
+if az appservice plan show --resource-group "$RG" --name "$PLAN" --output none 2>/dev/null; then
+  echo "   plano já existe, reaproveitando"
+else
+  az appservice plan create \
+    --resource-group "$RG" \
+    --name "$PLAN" \
+    --location "$LOCATION" \
+    --sku "$SKU" \
+    --is-linux \
+    --output none
+fi
+
+echo "==> 4) Criando o Web App ($RUNTIME)"
+if az webapp show --resource-group "$RG" --name "$APP" --output none 2>/dev/null; then
+  echo "   Web App já existe, reaproveitando"
+else
+  az webapp create \
+    --resource-group "$RG" \
+    --plan "$PLAN" \
+    --name "$APP" \
+    --runtime "$RUNTIME" \
+    --https-only true \
+    --output none
+fi
+
+echo "==> 5) Configurações do aplicativo (variáveis de ambiente)"
 az webapp config appsettings set \
   --resource-group "$RG" \
   --name "$APP" \
@@ -89,19 +108,41 @@ az webapp config appsettings set \
     JAVA_TIMEOUT="8" \
     SCM_DO_BUILD_DURING_DEPLOYMENT="true"
 
-echo "==> 4) Comando de inicialização (FastAPI com gunicorn) e só HTTPS"
+echo "==> 6) Comando de inicialização (FastAPI com gunicorn)"
 az webapp config set \
   --resource-group "$RG" \
   --name "$APP" \
   --output none \
   --startup-file "gunicorn -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --timeout 120 app.main:app"
-az webapp update --resource-group "$RG" --name "$APP" --https-only true --output none
 
-echo "==> 5) Reiniciando o Web App"
-az webapp restart --resource-group "$RG" --name "$APP"
+echo "==> 7) Empacotando o código (só o necessário para rodar)"
+PACOTE="$(mktemp -d)/sereno-ia.zip"
+ARQUIVOS="requirements.txt app ml/modelo ml/dados/locais.json rag/indice"
+if command -v zip >/dev/null 2>&1; then
+  zip -qr "$PACOTE" $ARQUIVOS -x '*__pycache__*' '*.pyc'
+else
+  python3 - "$PACOTE" $ARQUIVOS <<'EOF'
+import sys, zipfile
+from pathlib import Path
+destino, itens = sys.argv[1], sys.argv[2:]
+with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as z:
+    for item in itens:
+        p = Path(item)
+        for arq in ([p] if p.is_file() else sorted(x for x in p.rglob("*") if x.is_file())):
+            if "__pycache__" not in arq.parts and arq.suffix != ".pyc":
+                z.write(arq, arq.as_posix())
+EOF
+fi
+
+echo "==> 8) Deploy do pacote (a Azure instala o requirements.txt; a 1ª vez leva alguns minutos)"
+az webapp deploy \
+  --resource-group "$RG" \
+  --name "$APP" \
+  --src-path "$PACOTE" \
+  --type zip
 
 URL="https://$APP.azurewebsites.net"
-echo "==> 6) Testando $URL/ia/health (o 1º acesso demora: carrega o modelo)"
+echo "==> 9) Testando $URL/ia/health (o 1º acesso demora: carrega o modelo)"
 for i in $(seq 1 20); do
   RESPOSTA="$(curl -s --max-time 60 "$URL/ia/health" || true)"
   if [[ "$RESPOSTA" == *'"status":"UP"'* ]]; then

@@ -252,23 +252,27 @@ python iniciar.py testes
 
 ## Deploy na Azure
 
-Script `scripts/azure_deploy.sh`, no mesmo formato da aula de Web App (Azure CLI com `az webapp up`), no plano **gratuito F1** Linux em `brazilsouth`. Rodar no Cloud Shell do Portal (ou Git Bash/Linux com `az login`):
+Script `scripts/azure_deploy.sh`, no formato da aula de Web App (Azure CLI com `az webapp create` e `az webapp deploy`), no plano **gratuito F1** Linux em `brazilsouth`. Rodar no Cloud Shell do Portal, em Bash (ou Git Bash/Linux com `az login`):
 
 ```bash
-git clone <link deste repositório>
-cd sereno-ia
+git clone https://github.com/Pedro-HCosta/ProjetoSereno-IA.git
+cd ProjetoSereno-IA
 bash scripts/azure_deploy.sh
 ```
 
 | Passo | Comando | O que faz |
 | --- | --- | --- |
 | 1 | `az provider register --namespace Microsoft.Web` | Registra o serviço de Web App na assinatura |
-| 2 | `az webapp up --sku F1 --runtime PYTHON:3.12 --os-type Linux` | Cria o Grupo de Recursos `rg-sereno`, o Plano `planSereno` e o Web App `sereno-ia-rm563009` e faz o deploy; a Azure instala o `requirements.txt` (o `.env` e a `.venv` não são enviados) |
-| 3 | `az webapp config appsettings set` | Variáveis de ambiente: `JWT_SECRET` e `AI_API_KEY` (lidas do `.env` ou digitadas na hora, sem aparecer na tela), modelo do Groq e `JAVA_API_URL` da API Java no Render |
-| 4 | `az webapp config set --startup-file` | `gunicorn -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --timeout 120 app.main:app` e só HTTPS |
-| 5–6 | `az webapp restart` e `curl /ia/health` | Reinicia e espera o serviço responder `UP` |
+| 2 | `az group create` | Grupo de Recursos `rg-sereno` em `brazilsouth` |
+| 3 | `az appservice plan create --sku F1 --is-linux` | Plano `planSereno` (gratuito, Linux); reaproveita se já existir |
+| 4 | `az webapp create --runtime PYTHON:3.12 --https-only true` | Web App `sereno-ia-rm563009`; reaproveita se já existir |
+| 5 | `az webapp config appsettings set` | Variáveis de ambiente: `JWT_SECRET` e `AI_API_KEY` (lidas do `.env` ou digitadas na hora, sem aparecer na tela), modelo do Groq, `JAVA_API_URL` da API Java no Render e `SCM_DO_BUILD_DURING_DEPLOYMENT=true` |
+| 6 | `az webapp config set --startup-file` | `gunicorn -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --timeout 120 app.main:app` |
+| 7 | `zip` | Pacote só com `requirements.txt`, `app/`, `ml/modelo/`, `ml/dados/locais.json` e `rag/indice/` (sem `.env`, `.venv` nem testes) |
+| 8 | `az webapp deploy --type zip` | Publica o pacote; a Azure instala o `requirements.txt` |
+| 9 | `curl /ia/health` | Espera o serviço responder `UP` e mostra a URL e o Swagger |
 
-O modelo treinado e o índice das leis vão prontos no repositório: o servidor não treina nada. Para publicar uma mudança, rode o script de novo.
+O `JWT_SECRET` é o mesmo do Java e do .NET: é com ele que a IA confere o token de login emitido pelo Java (valor diferente = 401 em todas as chamadas). O modelo treinado e o índice das leis vão prontos no repositório: o servidor não treina nada. Para publicar uma mudança, rode o script de novo (os recursos existentes são reaproveitados).
 
 Limites do plano gratuito: 60 min de CPU por dia, 1 GB de RAM e sem Always On (o app dorme depois de uns 20 min sem acesso; o 1º acesso seguinte leva alguns segundos a mais). Para a correção, um monitor gratuito chamando `/ia/health` a cada 5–10 min mantém o serviço acordado.
 
