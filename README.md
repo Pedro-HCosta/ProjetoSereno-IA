@@ -266,10 +266,10 @@ bash scripts/azure_deploy.sh
 | 2 | `az group create` | Grupo de Recursos `rg-sereno` em `brazilsouth` |
 | 3 | `az appservice plan create --sku F1 --is-linux` | Plano `planSereno` (gratuito, Linux); reaproveita se já existir |
 | 4 | `az webapp create --runtime PYTHON:3.12 --https-only true` | Web App `sereno-ia-rm563009`; reaproveita se já existir |
-| 5 | `az webapp config appsettings set` | Variáveis de ambiente: `JWT_SECRET` e `AI_API_KEY` (lidas do `.env` ou digitadas na hora, sem aparecer na tela), modelo do Groq, `JAVA_API_URL` da API Java no Render e `SCM_DO_BUILD_DURING_DEPLOYMENT=true` |
-| 6 | `az webapp config set --startup-file` | `gunicorn -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --timeout 120 app.main:app` |
-| 7 | `zip` | Pacote só com `requirements.txt`, `app/`, `ml/modelo/`, `ml/dados/locais.json` e `rag/indice/` (sem `.env`, `.venv` nem testes) |
-| 8 | `az webapp deploy --type zip` | Publica o pacote; a Azure instala o `requirements.txt` |
+| 5 | `az webapp config appsettings set` | Variáveis de ambiente: `JWT_SECRET` e `AI_API_KEY` (lidas do `.env` ou digitadas na hora, sem aparecer na tela), modelo do Groq, `JAVA_API_URL` da API Java no Render, instalador da Azure desligado (`SCM_DO_BUILD_DURING_DEPLOYMENT=false`) e `PYTHONPATH` apontando para as dependências do pacote |
+| 6 | `az webapp config set --startup-file` | `python -m gunicorn -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --timeout 120 app.main:app` |
+| 7 | `pip install --target --platform manylinux --python-version 3.12` + `zip` | Pacote com o código, o modelo, o índice e as **dependências já instaladas** para o Linux da Azure (~105 MB). No plano F1 o instalador da Azure (Oryx) travava em "Installing uv..."; com tudo pronto, ela só copia os arquivos. Sem `.env`, `.venv` nem testes |
+| 8 | `az webapp deploy --type zip --clean true --async true` | Envia o pacote, limpando o que sobrou de deploys anteriores |
 | 9 | `curl /ia/health` | Espera o serviço responder `UP` e mostra a URL e o Swagger |
 
 O `JWT_SECRET` é o mesmo do Java e do .NET: é com ele que a IA confere o token de login emitido pelo Java (valor diferente = 401 em todas as chamadas). O modelo treinado e o índice das leis vão prontos no repositório: o servidor não treina nada. Para publicar uma mudança, rode o script de novo (os recursos existentes são reaproveitados).

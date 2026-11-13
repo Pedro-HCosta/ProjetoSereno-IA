@@ -106,44 +106,61 @@ az webapp config appsettings set \
     CACHE_TTL="3600" \
     JAVA_API_URL="$JAVA_API_URL" \
     JAVA_TIMEOUT="8" \
-    SCM_DO_BUILD_DURING_DEPLOYMENT="true"
+    SCM_DO_BUILD_DURING_DEPLOYMENT="false" \
+    ENABLE_ORYX_BUILD="false" \
+    PYTHONPATH="/home/site/wwwroot/__oryx_packages__"
+# As dependências vão prontas no pacote (passo 7): o instalador da Azure (Oryx) trava no plano F1.
+# Mudar as configurações também reinicia o Kudu, o que cancela algum deploy antigo que tenha travado.
 
 echo "==> 6) Comando de inicialização (FastAPI com gunicorn)"
 az webapp config set \
   --resource-group "$RG" \
   --name "$APP" \
   --output none \
-  --startup-file "gunicorn -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --timeout 120 app.main:app"
+  --startup-file "python -m gunicorn -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --timeout 120 app.main:app"
 
-echo "==> 7) Empacotando o código (só o necessário para rodar)"
+echo "==> 7) Montando o pacote com as dependências já instaladas (Linux, Python 3.12)"
+PY="$(command -v python3 || command -v python)"
+BUILD="$(mktemp -d)"
 PACOTE="$(mktemp -d)/sereno-ia.zip"
-ARQUIVOS="requirements.txt app ml/modelo ml/dados/locais.json rag/indice"
+cp -r requirements.txt app ml rag "$BUILD"/
+rm -rf "$BUILD"/ml/dados/avaliacoes_sinteticas.csv "$BUILD"/rag/leis "$BUILD"/rag/avaliacao
+# Baixa as versões prontas para o servidor da Azure (manylinux, CPython 3.12), seja qual for o PC
+"$PY" -m pip install --quiet --disable-pip-version-check \
+  --requirement requirements.txt --no-warn-conflicts --no-warn-script-location \
+  --target "$BUILD/__oryx_packages__" \
+  --platform manylinux_2_28_x86_64 --platform manylinux_2_17_x86_64 --platform manylinux2014_x86_64 \
+  --python-version 3.12 --implementation cp --only-binary=:all:
 if command -v zip >/dev/null 2>&1; then
-  zip -qr "$PACOTE" $ARQUIVOS -x '*__pycache__*' '*.pyc'
+  (cd "$BUILD" && zip -qr "$PACOTE" . -x '*__pycache__*' '*.pyc')
 else
-  python3 - "$PACOTE" $ARQUIVOS <<'EOF'
-import sys, zipfile
-from pathlib import Path
-destino, itens = sys.argv[1], sys.argv[2:]
-with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as z:
-    for item in itens:
-        p = Path(item)
-        for arq in ([p] if p.is_file() else sorted(x for x in p.rglob("*") if x.is_file())):
-            if "__pycache__" not in arq.parts and arq.suffix != ".pyc":
-                z.write(arq, arq.as_posix())
+  (cd "$BUILD" && "$PY" - "$PACOTE" <<'EOF'
+import os, sys, zipfile
+with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
+    for raiz, pastas, arquivos in os.walk("."):
+        pastas[:] = [p for p in pastas if p != "__pycache__"]
+        for a in arquivos:
+            if not a.endswith(".pyc"):
+                z.write(os.path.join(raiz, a))
 EOF
+  )
 fi
+echo "   pacote: $(du -h "$PACOTE" | cut -f1)"
 
-echo "==> 8) Deploy do pacote (a Azure instala o requirements.txt; a 1ª vez leva alguns minutos)"
+echo "==> 8) Deploy do pacote (sem instalação na Azure: só copia os arquivos)"
+# --clean true apaga o que sobrou de deploys anteriores; --async true evita o HTTP 502 por tempo no F1
 az webapp deploy \
   --resource-group "$RG" \
   --name "$APP" \
   --src-path "$PACOTE" \
-  --type zip
+  --type zip \
+  --clean true \
+  --async true
 
 URL="https://$APP.azurewebsites.net"
-echo "==> 9) Testando $URL/ia/health (o 1º acesso demora: carrega o modelo)"
-for i in $(seq 1 20); do
+echo "==> 9) Esperando $URL/ia/health responder (cópia dos arquivos + 1º acesso; alguns minutos)"
+echo "   Para ver os logs, em outra aba: az webapp log tail --resource-group $RG --name $APP"
+for i in $(seq 1 45); do
   RESPOSTA="$(curl -s --max-time 60 "$URL/ia/health" || true)"
   if [[ "$RESPOSTA" == *'"status":"UP"'* ]]; then
     echo "$RESPOSTA"
@@ -152,10 +169,11 @@ for i in $(seq 1 20); do
     echo "Swagger:          $URL/ia/docs"
     exit 0
   fi
-  echo "   aguardando... ($i/20)"
+  echo "   aguardando... ($i/45)"
   sleep 20
 done
-echo "Não respondeu ainda. Veja os logs: az webapp log tail --resource-group $RG --name $APP"
+echo "Não respondeu ainda. Veja: az webapp log deployment show --resource-group $RG --name $APP"
+echo "e:      az webapp log tail --resource-group $RG --name $APP"
 exit 1
 
 # LIMPAR O LABORATÓRIO (apaga tudo; não rode antes da correção!)
