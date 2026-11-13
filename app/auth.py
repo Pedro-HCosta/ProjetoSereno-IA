@@ -3,7 +3,8 @@ import base64
 import binascii
 
 import jwt
-from fastapi import Request
+from fastapi import Depends, Request
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from .config import carregar
 from .erros import ErroApi
@@ -20,15 +21,19 @@ def _chave(cfg) -> bytes:
     return chave
 
 
-def usuario_logado(request: Request) -> dict:
+# Declara o login no Swagger (botão "Authorize"). auto_error=False: o erro de token ausente
+# continua saindo no formato padrão do projeto, e não no formato do FastAPI.
+_bearer = HTTPBearer(auto_error=False, description="Token JWT do login na API Java (sem a palavra Bearer)")
+
+
+def usuario_logado(request: Request, credenciais: HTTPAuthorizationCredentials | None = Depends(_bearer)) -> dict:
     """Dependência do FastAPI: devolve {id, email, papel} ou responde 401 no formato padrão."""
     cfg = carregar()
     chave = _chave(cfg)
 
-    cabecalho = request.headers.get("Authorization", "")
-    if not cabecalho.lower().startswith("bearer "):
+    if credenciais is None or credenciais.scheme.lower() != "bearer" or not credenciais.credentials.strip():
         raise ErroApi(401, "NAO_AUTENTICADO", "Token ausente. Faça login no app.")
-    token = cabecalho.split(" ", 1)[1].strip()
+    token = credenciais.credentials.strip()
 
     try:
         dados = jwt.decode(
